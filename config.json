@@ -1,0 +1,90 @@
+{
+	"name": "REDCapConTestModule",
+
+	"namespace": "REDCapCon\\REDCapConTestModule",
+
+	"description": "Test cron process, save hook, report and API pull",
+
+	"documentation": "README.md",
+
+	"framework-version": 8,
+
+	"authors": [
+		{
+			"name": "Kyle McGuffin",
+			"email": "kyle.mcguffin@vumc.org",
+			"institution": "Vanderbilt University Medical Center"
+		}
+	],
+
+	"permissions": [
+		"redcap_add_edit_records_page",
+		"redcap_control_center",
+		"redcap_custom_verify_username",
+		"redcap_data_entry_form",
+		"redcap_data_entry_form_top",
+		"redcap_email",
+		"redcap_every_page_before_render",
+		"redcap_every_page_top",
+		"redcap_pdf",
+		"redcap_project_home_page",
+		"redcap_save_record",
+		"redcap_survey_acknowledgement_page",
+		"redcap_survey_complete",
+		"redcap_survey_page",
+		"redcap_survey_page_top",
+		"redcap_user_rights",
+		"redcap_module_system_enable",
+		"redcap_module_system_disable",
+		"redcap_module_system_change_version",
+		"redcap_module_project_enable",
+		"redcap_module_project_disable",
+		"redcap_module_configure_button_display",
+		"redcap_module_link_check_display",
+		"redcap_module_save_configuration"
+	],
+	
+	"enable-every-page-hooks-on-system-pages": false,	
+
+	"links": {
+		"project": [
+			{
+				"name": "Test Report",
+				"icon": "report",
+				"url": "report.php"
+			}
+		],
+		"control-center": [
+
+		]
+	},
+
+	"no-auth-pages": [
+
+	],
+
+	"project-settings": [
+
+	],
+
+	"system-settings": [
+
+	],
+
+	"crons": [
+		{
+			"cron_name": "redcapcon_2022_api_pull",
+			"cron_description": "Daily cron to pull data",
+			"method": "run_cron",
+			"cron_frequency": "86400",
+			"cron_max_run_time": "60"
+		}
+	],
+
+	"compatibility": {
+		"php-version-min": "",
+		"php-version-max": "",
+		"redcap-version-min": "",
+		"redcap-version-max": ""
+	}
+}
