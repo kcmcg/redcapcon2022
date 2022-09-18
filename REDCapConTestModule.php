@@ -113,7 +113,7 @@ class REDCapConTestModule extends \ExternalModules\AbstractExternalModule {
 
 	
 	public function redcap_module_link_check_display( $project_id, $link ) {
-		
+		return $link;
 	}
 
 	
@@ -124,6 +124,17 @@ class REDCapConTestModule extends \ExternalModules\AbstractExternalModule {
 	
 
 	public function run_cron( $cronParameters ) {
-
+	
+	}
+	
+	public function connectToSpaceXAPI( $dataType ) {
+		$ch = curl_init("https://api.spacexdata.com/v4/".$dataType);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$results = curl_exec($ch);
+		curl_close($ch);
+		
+		$data = json_decode($results,true);
+		
+		return $data;
 	}
 }
