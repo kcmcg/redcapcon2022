@@ -1,7 +1,5 @@
 <?php
 /** @var $module \REDCapCon\REDCapConTestModule\REDCapConTestModule */
-include_once(\ExternalModules\ExternalModules::getProjectHeaderPath());
-
 $recordData = \REDCap::getData([
 	"return_format" => "json",
 	"project_id" => $project_id
@@ -23,6 +21,28 @@ foreach($recordData as $thisRecord) {
 	}
 }
 
-echo "<br /><pre>";
-var_dump($launchesPerYear);
-echo "</pre><br />";
+#### Output
+include_once(\ExternalModules\ExternalModules::getProjectHeaderPath());
+?>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
+<div id="chartDiv" style="max-height:400px;max-width:800px;">
+	<canvas id="launchesChart"></canvas>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		let ctx = document.getElementById("launchesChart").getContext("2d");
+		
+        let myChart = new Chart(ctx, {
+			type:"bar",
+			data: {
+				datasets:[{
+                    label: "Launches",
+					data:<?=json_encode($launchesPerYear)?>
+                }]
+            }
+        });
+    });
+</script>
