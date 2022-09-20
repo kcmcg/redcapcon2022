@@ -1,5 +1,7 @@
 <?php
-/** @var $module \REDCapCon\REDCapConTestModule\REDCapConTestModule */
+namespace REDCapCon\REDCapConTestModule;
+
+/** @var $module REDCapConTestModule */
 $recordData = \REDCap::getData([
 	"return_format" => "json",
 	"project_id" => $project_id

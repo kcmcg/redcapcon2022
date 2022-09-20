@@ -7,82 +7,109 @@ class REDCapConTestModule extends \ExternalModules\AbstractExternalModule {
 		// Other code to run when object is instantiated
 	}
 	
-	public function redcap_add_edit_records_page( int $project_id, string $instrument, int $event_id ) {
-		
+	public function redcap_add_edit_records_page( $project_id, $instrument, $event_id ) {
+	
 	}
 
 	
 	public function redcap_control_center(  ) {
-		
+	
 	}
 
 	
-	public function redcap_custom_verify_username( string $username ) {
-		
+	public function redcap_custom_verify_username( $username ) {
+	
 	}
 
 	
-	public function redcap_data_entry_form( int $project_id, string $record, string $instrument, int $event_id, int $group_id, int $repeat_instance ) {
+	public function redcap_data_entry_form( $project_id, $record, $instrument, $event_id, $group_id, $repeat_instance ) {
+		$data = \REDCap::getData([
+			"project_id" => $project_id,
+			"records" => $record,
+			"fields" => "launch_date",
+			"return_format" => "json"
+		]);
 		
+        $time = time();
+		$data = json_decode($data,true);
+		
+		$upcomingLaunch = false;
+		foreach($data as $thisRow) {
+			$launch = $thisRow["launch_date"] ? strtotime($thisRow["launch_date"]) : 0;
+			if($launch > $time && $launch < ($time + 60*60*24*90)) {
+				$upcomingLaunch = true;
+				break;
+			}
+		}
+		
+		if($upcomingLaunch) {
+			?>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    $("#dataEntryTopOptions").after("<div style='background-color:red;color:white;font-weight:bold;max-width:300px;text-align:center;padding:10px'>Upcoming!</div>");
+                });
+            </script>
+			<?php
+		}
 	}
 
 	
-	public function redcap_data_entry_form_top( int $project_id, string $record, string $instrument, int $event_id, int $group_id, int $repeat_instance ) {
-		
+	public function redcap_data_entry_form_top( $project_id, $record, $instrument, $event_id, $group_id, $repeat_instance ) {
+ 
 	}
 
 	
-	public function redcap_email( string $to, string $from, string $subject, string $message, string $cc, string $bcc, string $fromName, array $attachments ) {
-		
+	public function redcap_email( $to, $from, $subject, $message, $cc, $bcc, $fromName, $attachments ) {
+	
 	}
 
 	
-	public function redcap_every_page_before_render( int $project_id ) {
-		
+	public function redcap_every_page_before_render( $project_id ) {
+	
 	}
 
 	
-	public function redcap_every_page_top( int $project_id ) {
-		
+	public function redcap_every_page_top( $project_id ) {
+	
 	}
 
 	
-	public function redcap_pdf( int $project_id, array $metadata, array $data, string $instrument, string $record, int $event_id, int $instance ) {
-		
+	public function redcap_pdf( $project_id, $metadata, $data, $instrument, $record, $event_id, $instance ) {
+	
 	}
 
 	
-	public function redcap_project_home_page( int $project_id ) {
-		
+	public function redcap_project_home_page( $project_id ) {
+	
 	}
 
 	
-	public function redcap_save_record( int $project_id, string $record, string $instrument, int $event_id, int $group_id, string $survey_hash, int $response_id, int $repeat_instance ) {
-		
+	public function redcap_save_record( $project_id, $record, $instrument, $event_id, $group_id, $survey_hash, $response_id, $repeat_instance ) {
+		## TODO Save log when manually updated with last user
 	}
 
 	
-	public function redcap_survey_acknowledgement_page( int $project_id, string $record, string $instrument, int $event_id, int $group_id, string $survey_hash, int $response_id, int $repeat_instance ) {
-		
+	public function redcap_survey_acknowledgement_page( $project_id, $record, $instrument, $event_id, $group_id, $survey_hash, $response_id, $repeat_instance ) {
+	
 	}
 
 	
-	public function redcap_survey_complete( int $project_id, string $record, string $instrument, int $event_id, int $group_id, string $survey_hash, int $response_id, int $repeat_instance ) {
-		
+	public function redcap_survey_complete( $project_id, $record, $instrument, $event_id, $group_id, $survey_hash, $response_id, $repeat_instance ) {
+	
 	}
 
 	
-	public function redcap_survey_page( int $project_id, string $record, string $instrument, int $event_id, int $group_id, string $survey_hash, int $response_id, int $repeat_instance ) {
-		
+	public function redcap_survey_page( $project_id, $record, $instrument, $event_id, $group_id, $survey_hash, $response_id, $repeat_instance ) {
+	
 	}
 
 	
-	public function redcap_survey_page_top( int $project_id, string $record, string $instrument, int $event_id, int $group_id, string $survey_hash, int $response_id, int $repeat_instance ) {
-		
+	public function redcap_survey_page_top( $project_id, $record, $instrument, $event_id, $group_id, $survey_hash, $response_id, $repeat_instance ) {
+	
 	}
 
 	
-	public function redcap_user_rights(  int $project_id ) {
+	public function redcap_user_rights(  $project_id ) {
 		
 	}
 
@@ -113,6 +140,7 @@ class REDCapConTestModule extends \ExternalModules\AbstractExternalModule {
 
 	
 	public function redcap_module_link_check_display( $project_id, $link ) {
+		## TODO SUPERUSER only
 		return $link;
 	}
 
