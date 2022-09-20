@@ -85,7 +85,35 @@ class REDCapConTestModule extends \ExternalModules\AbstractExternalModule {
 
 	
 	public function redcap_save_record( $project_id, $record, $instrument, $event_id, $group_id, $survey_hash, $response_id, $repeat_instance ) {
-		## TODO Save log when manually updated with last user
+		$data = \REDCap::getData([
+			"project_id" => $project_id,
+			"records" => $record,
+			"fields" => "launch_date",
+			"return_format" => "json"
+		]);
+		$recordData = json_decode($data,true);
+        
+        $launchDate = reset($recordData)["launch_date"];
+        
+        $q = $this->queryLogs("SELECT launch_date WHERE record = ? AND project_id = ?", [$record, $project_id]);
+        $latestLaunch = false;
+        
+        while($row = db_fetch_assoc($q)) {
+	        $latestLaunch = $row["launch_date"];
+		}
+        
+        if($launchDate != $latestLaunch) {
+            if($launchDate > $latestLaunch && $latestLaunch !== false) {
+    	        $this->log("Launch Delayed",["record" => $record, "project_id" => $project_id, "launch_date" => $launchDate]);
+                \REDCap::logEvent("Launch Delayed","","",$record,null,$project_id);
+			}
+            else if($latestLaunch === false) {
+    			$this->log("New Launch",["record" => $record, "project_id" => $project_id, "launch_date" => $launchDate]);
+			}
+            else {
+				$this->log("Launch Pulled Ahead",["record" => $record, "project_id" => $project_id, "launch_date" => $launchDate]);
+			}
+		}
 	}
 
 	
